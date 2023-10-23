@@ -40,5 +40,10 @@
 #define _NUM_BSPC LT(_NUM, KC_BSPC)
 #define _FN_DEL LT(_FN, KC_DEL)
 
+// Default layers
+#define TO_GAME TO(_GAME)
+#define TO_BASE TO(_BASE)
+#define TO_COL TO(_COL)
+
 // TODO: Add application shortcuts for MEH and HYPR keys
 enum platform_keycodes { U_RDO = SAFE_RANGE, U_PST, U_CPY, U_CUT, U_UND };

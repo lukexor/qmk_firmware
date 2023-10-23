@@ -29,24 +29,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case U_UND:
                 return macos_key(MOD_BIT(KC_LGUI), KC_Z, record);
         }
-        uint8_t mods = get_mods();
-        if (record->event.pressed && mods & MOD_MASK_CTRL) {
-            switch (keycode) {
-                case GUI_A: // select all
-                case KC_F:  // find
-                case SFT_F:
-                case KC_O:  // open
-                case KC_P:  // print
-                case CTL_S: // save
-                case ALT_S:
-                case SFT_T_: // new tab
-                case KC_W:   // close
-                    set_mods(MOD_BIT(KC_LGUI));
-                    register_code(keycode);
-                    del_mods(MOD_BIT(KC_LGUI));
-                    return false;
-            }
-        }
     }
 
     return true;
