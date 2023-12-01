@@ -15,124 +15,82 @@
  */
 
 #include QMK_KEYBOARD_H
-#include "lukexor.h"
 
-enum layers {
-    _BASE,
-    _GAME,
-    _COL,
-    _NAV,
-    // _MOUSE,
-    _MEDIA,
-    _NUM,
-    _SYM,
-    _FN,
-};
+#define _MAC_BASE 0
+#define _WIN_BASE 1
+#define _COLEMAK 2
+#define _FN 3
 
-// clang-format off
+/* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_BASE] = LAYOUT_ansi_67(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_MUTE,
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          KC_DEL,
-        KC_ESC,  GUI_A,   ALT_S,   CTL_D,   SFT_F,   MEH_G,   MEH_H,   SFT_J,   CTL_K,   ALT_L,   GUI_SCLN,KC_QUOT,          KC_ENT,           KC_HOME,
-        KC_LSFT, HYPR_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  HYPR_SLSH,KC_RSFT,                  KC_UP,
-        KC_LCTL, KC_LOPT, KC_LGUI,                            _NAV_SPC,                         _SYM_ENT, _NUM_BSPC,_FN_DEL, KC_LEFT, KC_DOWN, KC_RGHT
-    ),
+    [_MAC_BASE] = LAYOUT_ansi_67(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,  KC_EQL,   KC_BSPC,          KC_MUTE,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,  KC_RBRC,  KC_BSLS,          KC_DEL,
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,            KC_ENT,           KC_HOME,
+        KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,            KC_RSFT, KC_UP,
+        KC_LCTL, KC_LOPT, KC_LCMD,                            KC_SPC,                             KC_RCMD, MO(_FN),TG(_COLEMAK),KC_LEFT, KC_DOWN, KC_RGHT),
 
-    [_GAME] = LAYOUT_ansi_67(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, _______,          _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                   _______,
-        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
-    ),
+    [_WIN_BASE] = LAYOUT_ansi_67(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,  KC_EQL,    KC_BSPC,          KC_MUTE,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,  KC_RBRC,   KC_BSLS,          KC_DEL,
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,             KC_ENT,           KC_HOME,
+        KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,             KC_RSFT, KC_UP,
+        KC_LCTL, KC_LWIN, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FN),TG(_COLEMAK),KC_LEFT, KC_DOWN, KC_RGHT),
 
-    [_COL] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          KC_MUTE,
-        KC_PLUS, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_PIPE, XXXXXXX, XXXXXXX,          DF(_BASE),
-        KC_AMPR, GUI_A,   ALT_R,   CTL_S,   SFT_T_,  MEH_G,   MEH_M,   SFT_N,   CTL_E,   ALT_I,   GUI_O,   KC_EQL,           XXXXXXX,          XXXXXXX,
-        KC_MINS, HYPR_Z,  KC_X,    KC_C,    KC_D,    KC_V,    KC_K,    KC_H,    KC_COMM, KC_DOT, HYPR_SLSH,KC_UNDS,                   XXXXXXX,
-        _MEDIA_ESC, _NAV_SPC, KC_TAB,                         _NAV_SPC,                         _SYM_ENT, _NUM_BSPC, _FN_DEL,XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-
-
-    [_NAV] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        TO_COL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,   XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        TO_BASE, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX, CW_TOGG, KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,XXXXXXX,          XXXXXXX,          XXXXXXX,
-        TO_GAME, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_INS,  XXXXXXX, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  XXXXXXX,                   XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX,                            KC_ENT,  KC_BSPC, KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-
-    // [_MOUSE] = LAYOUT_ansi_67(
-    //     KC_ESC,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BSPC,          XXXXXXX,
-    //     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,   XXXXXXX, XXXXXXX, XXXXXXX,          KC_DEL,
-    //     XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX, XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX,          KC_ENT,           KC_HOME,
-    //     KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, XXXXXXX, KC_RSFT,                   XXXXXXX,
-    //     KC_LCTL, KC_LOPT, KC_LGUI,                            XXXXXXX,                            KC_BTN2, KC_BTN1, KC_BTN3, XXXXXXX, XXXXXXX, XXXXXXX
-    // ),
-
-    [_MEDIA] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX, XXXXXXX, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, XXXXXXX,          XXXXXXX,          XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX,                            KC_MSTP, KC_MPLY, KC_MUTE, XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-
-    [_NUM] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC, XXXXXXX, DT_PRNT, DT_DOWN, DT_UP,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,    KC_EQL,  XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,          XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX,
-        KC_DOT,  KC_0,    KC_MINS,                            XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-
-    [_SYM] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS, XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,          XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX,
-        KC_LPRN, KC_RPRN, KC_UNDS,                            XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-    ),
+    [_COLEMAK] = LAYOUT_ansi_67(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,  KC_EQL,    KC_BSPC,          KC_MUTE,
+        KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_LBRC,  KC_RBRC,   KC_BSLS,          KC_DEL,
+        KC_CAPS, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,    KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,             KC_ENT,           KC_HOME,
+        KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,             KC_RSFT, KC_UP,
+        KC_LCTL, KC_LWIN, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FN),TG(_COLEMAK),KC_LEFT, KC_DOWN, KC_RGHT),
 
     [_FN] = LAYOUT_ansi_67(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SCRL, XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,          XXXXXXX,          XXXXXXX,
-        XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX,
-        KC_APP,  KC_SPC,  KC_TAB,                             XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-    ),
+        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,   KC_F12,    _______,          RGB_TOG,
+        _______, RGB_MOD, RGB_VAI, RGB_HUI, RGB_SAI, RGB_SPI, _______, _______, _______, _______, _______, _______,  _______,   _______,          _______,
+        _______, RGB_RMOD,RGB_VAD, RGB_HUD, RGB_SAD, RGB_SPD, _______, _______, _______, _______, _______, _______,             _______,          _______,
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______, _______,
+        _______, _______, _______,                            _______,                            _______, _______,  _______,   _______, _______, _______),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE]  = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_GAME]  = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_COL]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_NAV]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    // [_MOUSE]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_MEDIA] = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
-    [_NUM]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_SYM]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [_FN]    = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [_MAC_BASE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_WIN_BASE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_COLEMAK] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_FN]     = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
 };
 #endif
-// clang-format on
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
-        case _COL:
+        case _COLEMAK:
             rgb_matrix_sethsv(HSV_TEAL);
             break;
-        case _GAME:
-            rgb_matrix_sethsv(HSV_BLUE);
-            break;
-        case _BASE:
-            rgb_matrix_sethsv(HSV_RED);
+        case _MAC_BASE:
+        case _WIN_BASE:
+            rgb_matrix_sethsv(HSV_MAGENTA);
             break;
     }
     return state;
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i < led_max; i++) {
+            if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {
+                rgb_matrix_set_color(i, RGB_RED);
+            }
+        }
+    } else {
+        switch(get_highest_layer(layer_state|default_layer_state)) {
+            case _COLEMAK:
+                rgb_matrix_set_color_all(RGB_TEAL);
+                break;
+            default:
+                break;
+        }
+    }
+    return false;
 }
 
 const key_override_t del_override       = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);

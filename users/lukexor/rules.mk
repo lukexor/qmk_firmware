@@ -1,13 +1,6 @@
-SRC += lukexor.c
-
-DYNAMIC_TAPPING_TERM_ENABLE = yes # Temporary until values are dialed in
+# SRC += lukexor.c
 
 CAPS_WORD_ENABLE = yes
-EXTRAKEY_ENABLE = yes
-KEY_OVERRIDE_ENABLE = yes
-MOUSEKEY_ENABLE = yes
-OS_DETECTION_ENABLE = yes
-WPM_ENABLE = yes
 
 # Reduces firmware size
 AUTO_SHIFT_ENABLE = no
@@ -16,7 +9,7 @@ COMBO_ENABLE = no
 COMMAND_ENABLE = no
 CONSOLE_ENABLE = no
 GRAVE_ESC_ENABLE = no
-LTO_ENABLE=yes
+LTO_ENABLE = yes
 MAGIC_ENABLE = no
 MUSIC_ENABLE = no
 SPACE_CADET_ENABLE = no
