@@ -1,5 +1,9 @@
 #pragma once
 
+#define ONESHOT_TAP_TOGGLE 3
+#define ONESHOT_TIMEOUT 1000
+#define RGBLIGHT_LAYERS
+
 // Mod-tap settings
 #define TAPPING_TERM 250
 #define QUICK_TAP_TERM 120
@@ -78,4 +82,4 @@
 #undef ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
 
 #define NO_MUSIC_MODE
-#define LAYER_STATE_8BIT // Limit to only 8 layers
+#define LAYER_STATE_16BIT // Limit to only 16 layers
