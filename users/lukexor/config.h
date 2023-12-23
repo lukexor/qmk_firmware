@@ -5,8 +5,8 @@
 #define RGBLIGHT_LAYERS
 
 // Mod-tap settings
-#define TAPPING_TERM 250
-#define QUICK_TAP_TERM 120
+#define TAPPING_TERM 200
+#define QUICK_TAP_TERM 150
 #define BILATERAL_COMBINATIONS
 
 // Mouse key speed and acceleration.
