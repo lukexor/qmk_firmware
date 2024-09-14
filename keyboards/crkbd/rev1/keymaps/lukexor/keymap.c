@@ -20,30 +20,29 @@
 #define UUU KC_NO   // Unused key
 #define ___ KC_TRNS // Transparent key
 
-#define _BASE 0
-#define _GAME 1
-#define _SYM 2
-#define _NAV 3
-#define _NUM 4
-#define _MOUSE 5
-#define _MEDIA 6
-#define _FN 7
+#define _QTY 0
+#define _COL 1
+#define _GAME 2
+#define _SYM 3
+#define _NAV 4
+#define _NUM 5
+#define _MOUSE 6
+#define _MEDIA 7
+#define _FN 8
 
 // Sticky key
 #define SK(mod) OSM(mod)
 
 // Layer Toggles
-#define _TB TO(_BASE)
+#define _TQ TO(_QTY)
+#define _TC TO(_COL)
 #define _TG TO(_GAME)
 
 // Home-row Mods
 #define HLA(key) LALT_T(key)
 #define HLG(key) LGUI_T(key)
-#define HRG(key) RGUI_T(key)
 #define HLC(key) LCTL_T(key)
-#define HRC(key) RCTL_T(key)
 #define HLS(key) LSFT_T(key)
-#define HRS(key) RSFT_T(key)
 
 // Mod-taps
 #define MEHT(key) MEH_T(key)
@@ -82,8 +81,11 @@ static void oled_render_layer_state(void) {
     }
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
-        case _BASE:
-            oled_write_ln_P(PSTR("Base"), false);
+        case _QTY:
+            oled_write_ln_P(PSTR("Qwerty"), false);
+            break;
+        case _COL:
+            oled_write_ln_P(PSTR("Colemak"), false);
             break;
         case _GAME:
             oled_write_ln_P(PSTR("Game"), false);
@@ -134,12 +136,16 @@ bool oled_task_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
+    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
     switch (get_highest_layer(state)) {
-        case _BASE:
-            rgblight_sethsv_noeeprom(HSV_TEAL);
+        case _QTY:
+            rgblight_mode_noeeprom(RGBLIGHT_DEFAULT_MODE);
+            break;
+        case _COL:
+            rgblight_sethsv_noeeprom(HSV_GREEN);
             break;
         case _GAME:
-            rgblight_sethsv_noeeprom(HSV_GREEN);
+            rgblight_sethsv_noeeprom(HSV_PINK);
             break;
         case _SYM:
             rgblight_sethsv_noeeprom(HSV_BLUE);
@@ -148,7 +154,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             rgblight_sethsv_noeeprom(HSV_MAGENTA);
             break;
         case _NUM:
-            rgblight_sethsv_noeeprom(HSV_CYAN);
+            rgblight_sethsv_noeeprom(HSV_TEAL);
             break;
         case _MOUSE:
             rgblight_sethsv_noeeprom(HSV_ORANGE);
@@ -165,19 +171,35 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 /* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_BASE] = LAYOUT_split_3x6_3(
+    [_QTY] = LAYOUT_split_3x6_3(
+        // ┌──────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐  ┌─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬──────┐
+        // │      │ Q           │ W           │ E           │ R           │ T           │  │ Y           │ U           │ I           │ O           │ P           │      │
+             UUU,   KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,            KC_Y,         KC_U,         KC_I,         KC_O,         KC_P,         UUU,
+        // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
+        // │      │ A 󰘳/Super   │ S 󰘵/Alt     │ D 󰘴/Ctrl    │ F 󰘶         │ G           │  │ H           │ J 󰘶         │ K 󰘴/Ctrl    │ L 󰘵/Alt     │ ' " 󰘳/Super │      │
+             UUU,   HLG(KC_A),    HLA(KC_S),    HLC(KC_D),    HLS(KC_F),    KC_G,            KC_H,         HLS(KC_J),    HLC(KC_K),    HLA(KC_L),    HLG(KC_QUOT), UUU,
+        // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
+        // │      │ Z 󰘴󰘶󰘵/Meh   │ X 󰘴󰘶󰘵󰘳/Hyp  │ C           │ V           │ B           │  │ N           │ M           │ , <         │ . > 󰘴󰘶󰘵󰘳/Hyp│ / ? 󰘴󰘶󰘵/Meh │      │
+             UUU,   MEHT(KC_Z),   HYPT(KC_X),   KC_C,         KC_V,         KC_B,            KC_N,         KC_M,         KC_COMM,      HYPT(KC_DOT), MEHT(KC_SLSH),UUU,
+        // └──────────────────────────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┴─────────────┴──────┘
+        //                                    │ Esc _SYM    │ 󱁐 _NAV      │  _NUM      │  │ ⏎ _MOUSE    │ 󰭜 _MEDIA    │ 󰹿 _FN       │
+                                                _S(KC_ESC),   _NV(KC_SPC),  _N(KC_TAB),      _MS(KC_ENT),  _M(KC_BSPC),  _F(KC_DEL)
+        //                                    └─────────────┴─────────────┴─────────────┘  └─────────────┴─────────────┴─────────────┘
+    ),
+
+    [_COL] = LAYOUT_split_3x6_3(
         // ┌──────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐  ┌─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬──────┐
         // │      │ Q           │ W           │ F           │ P           │ B           │  │ J           │ L           │ U           │ Y           │ ' "         │      │
              UUU,   KC_Q,         KC_W,         KC_F,         KC_P,         KC_B,            KC_J,         KC_L,         KC_U,         KC_Y,         KC_QUOT,      UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
-        // │      │ A 󰘳         │ R 󰘵         │ S 󰘴         │ T 󰘶         │ G           │  │ M           │ N 󰘶         │ E 󰘴         │ I 󰘵         │ O 󰘳         │      │
-             UUU,   HLG(KC_A),    HLA(KC_R),    HLC(KC_S),    HLS(KC_T),    KC_G,            KC_M,         HRS(KC_N),    HRC(KC_E),    HLA(KC_I),    HRG(KC_O),    UUU,
+        // │      │ A 󰘳/Super   │ R 󰘵/Alt     │ S 󰘴/Ctrl    │ T 󰘶         │ G           │  │ M           │ N 󰘶         │ E 󰘴/Ctrl    │ I 󰘵/Alt     │ O 󰘳/Super   │      │
+             UUU,   HLG(KC_A),    HLA(KC_R),    HLC(KC_S),    HLS(KC_T),    KC_G,            KC_M,         HLS(KC_N),    HLC(KC_E),    HLA(KC_I),    HLG(KC_O),    UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
-        // │      │ Z 󰘴󰘶󰘵       │ X 󰘴󰘶󰘵󰘳      │ C           │ D           │ V           │  │ K           │ H           │ , <         │ . > 󰘴󰘶󰘵󰘳    │ / ? 󰘴󰘶󰘵     │      │
-             UUU,   MEHT(KC_Z),   HYPT(KC_X),   KC_C,         KC_D,         KC_V,            KC_K,         KC_H,         KC_COMM,      HYPT(KC_DOT), MEHT(KC_SLSH), UUU,
+        // │      │ Z 󰘴󰘶󰘵/Meh   │ X 󰘴󰘶󰘵󰘳/Hyp  │ C           │ D           │ V           │  │ K           │ H           │ , <         │ . > 󰘴󰘶󰘵󰘳/Hyp│ / ? 󰘴󰘶󰘵/Meh │      │
+             UUU,   MEHT(KC_Z),   HYPT(KC_X),   KC_C,         KC_D,         KC_V,            KC_K,         KC_H,         KC_COMM,      HYPT(KC_DOT), MEHT(KC_SLSH),UUU,
         // └──────────────────────────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┴─────────────┴──────┘
         //                                    │ Esc _SYM    │ 󱁐 _NAV      │  _NUM      │  │ ⏎ _MOUSE    │ 󰭜 _MEDIA    │ 󰹿 _FN       │
-                                                _S(KC_ESC),   _NV(KC_SPC),  _N(KC_TAB),      _MS(KC_ENT),  _M(KC_BSPC),  _F(KC_DEL)
+                                                ___,          ___,          ___,              ___,          ___,          ___
         //                                    └─────────────┴─────────────┴─────────────┘  └─────────────┴─────────────┴─────────────┘
     ),
 
@@ -186,14 +208,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // │      │ Q           │ W           │ E           │ R           │ T           │  │ Y           │ U           │ I           │ O           │ P           │      │
              UUU,   KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,            KC_Y,         KC_U,         KC_I,         KC_O,         KC_P,         UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
-        // │      │ A           │ S           │ D           │ F           │ G           │  │ H           │ J           │ K           │ L           │ ' "         │      │
+        // │      │ A           │ S           │ D           │ F           │ G           │  │ H           │ J 󰘶         │ K           │ L           │ ' "         │      │
              UUU,   KC_A,         KC_S,         KC_D,         KC_F,         KC_G,            KC_H,         KC_J,         KC_K,         KC_L,         KC_QUOT,      UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
         // │      │ Z           │ X           │ C           │ V           │ B           │  │ N           │ M           │ , <         │ . >         │ / ?         │      │
              UUU,   KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,            KC_N,         KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      UUU,
         // └──────────────────────────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┴─────────────┴──────┘
         //                                    │ Esc _SYM    │ 󱁐 _NAV      │  _NUM      │  │ ⏎ _MOUSE    │ 󰭜 _MEDIA    │ 󰹿 _FN       │
-                                                ___,          ___,          ___,             ___,          ___,          ___
+                                               ___,          ___,          ___,              ___,          ___,          ___
         //                                    └─────────────┴─────────────┴─────────────┘  └─────────────┴─────────────┴─────────────┘
     ),
 
@@ -279,14 +301,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FN] = LAYOUT_split_3x6_3(
         // ┌──────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐  ┌─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬──────┐
-        // │      │ F12         │ F7          │ F8          │ F9          │ _BASE       │  │             │             │             │             │             │      │
-             UUU,   KC_F12,       KC_F7,        KC_F8,        KC_F9,        _TB,             XXX,          XXX,          XXX,          XXX,          XXX,          UUU,
+        // │      │ F12         │ F7          │ F8          │ F9          │ _QTY        │  │             │             │             │             │             │      │
+             UUU,   KC_F12,       KC_F7,        KC_F8,        KC_F9,        _TQ,             XXX,          XXX,          XXX,          XXX,          XXX,          UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
-        // │      │ F11         │ F4          │ F5          │ F6          │ _GAME       │  │ AltGr       │ 󰘶           │ 󰘴           │ 󰘵           │ 󰘳           │      │
-             UUU,   KC_F11,       KC_F4,        KC_F5,        KC_F6,        _TG,             SK(MOD_RALT), SK(MOD_RSFT), SK(MOD_RCTL), SK(MOD_LALT), SK(MOD_LGUI), UUU,
+        // │      │ F11         │ F4          │ F5          │ F6          │ _COL        │  │ AltGr       │ 󰘶           │ 󰘴           │ 󰘵           │ 󰘳           │      │
+             UUU,   KC_F11,       KC_F4,        KC_F5,        KC_F6,        _TC,             SK(MOD_RALT), SK(MOD_RSFT), SK(MOD_RCTL), SK(MOD_LALT), SK(MOD_LGUI), UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼──────┤
-        // │      │ F10         │ F1          │ F2          │ F3          │             │  │             │             │             │             │             │      │
-             UUU,   KC_F10,       KC_F1,        KC_F2,        KC_F3,        XXX,             XXX,          XXX,          XXX,          UUU,          UUU,          UUU,
+        // │      │ F10         │ F1          │ F2          │ F3          │ _GAME       │  │             │             │             │             │             │      │
+             UUU,   KC_F10,       KC_F1,        KC_F2,        KC_F3,        _TG,             XXX,          XXX,          XXX,          UUU,          UUU,          UUU,
         // ├──────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤  ├─────────────┼─────────────┼─────────────┼─────────────┴─────────────┴──────┘
         //                                    │             │ 󱁐           │            │  │             │             │ *           │
                                                 XXX,          KC_SPC,       KC_TAB,          XXX,          XXX,          XXX
