@@ -3,8 +3,8 @@
 CAPS_WORD_ENABLE = yes
 DEFERRED_EXEC_ENABLE = yes
 RGBLIGHT_ENABLE = yes
-MOUSEKEY_ENABLE = yes
 WPM_ENABLE = yes
+TRI_LAYER_ENABLE = yes
 
 # Reduces firmware size
 AUTO_SHIFT_ENABLE = no

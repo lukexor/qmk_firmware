@@ -428,3 +428,12 @@ distclean: clean
 	echo -n 'Deleting *.bin, *.hex, and *.uf2 ... '
 	rm -f *.bin *.hex *.uf2
 	echo 'done.'
+
+crkbd-left:
+	sudo qmk flash -kb crkbd/rev1 -km lukexor -bl dfu-split-left
+
+crkbd-right:
+	sudo qmk flash -kb crkbd/rev1 -km lukexor -bl dfu-split-right
+
+planck:
+	sudo qmk flash -kb planck/rev7 -km lukexor

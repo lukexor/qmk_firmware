@@ -1,20 +1,37 @@
 #pragma once
 
+#define XXX KC_NO   // No-op key
+#define ___ KC_TRNS // Transparent key
+
+// Layers
+#define _COL 0
+#define _EXT 1
+#define _NUM 2
+#define _FN 3
+
+#define MG(key) LGUI_T(key)
+#define MLA(key) LALT_T(key)
+#define MRA(key) RALT_T(key)
+#define MC(key) LCTL_T(key)
+#define MS(key) LSFT_T(key)
+#define MMEH(key) MEH_T(key)
+#define MHYP(key) HYPR_T(key)
+
+// Layer Toggles
+#define _TC DF(_COL)
+
+#define LCS(kc) LCTL(LSFT(kc))
+
+// One shot mods
+#define OLALT OSM(MOD_LALT)
+#define OLGUI OSM(MOD_LGUI)
+#define OLSFT OSM(MOD_LSFT)
+#define OLCTL OSM(MOD_LCTL)
+#define ORALT OSM(MOD_RALT)
+
 #define ONESHOT_TAP_TOGGLE 3
 #define ONESHOT_TIMEOUT 1000
 #define RGBLIGHT_LAYERS
-
-// Mod-tap settings
-#define TAPPING_TERM 200
-#define QUICK_TAP_TERM 150
-#define BILATERAL_COMBINATIONS
-
-// Mouse key speed and acceleration.
-#define MOUSEKEY_DELAY 0
-#define MOUSEKEY_INTERVAL 16
-#define MOUSEKEY_WHEEL_DELAY 0
-#define MOUSEKEY_MAX_SPEED 6
-#define MOUSEKEY_TIME_TO_MAX 64
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_BAND_PINWHEEL_VAL
 #define RGB_MATRIX_DEFAULT_HUE 213
@@ -24,7 +41,7 @@
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 
 #define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-#define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_RAINBOW_SWIRL + 2
+#define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_RAINBOW_SWIRL + 3
 #define RGBLIGHT_DEFAULT_HUE 128
 #define RGBLIGHT_DEFAULT_SAT 255
 #define RGBLIGHT_DEFAULT_VAL 128
