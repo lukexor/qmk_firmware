@@ -466,3 +466,19 @@ format-and-pytest:
 	RUNTIME=docker ./util/docker_cmd.sh qmk format-c --core-only -a
 	RUNTIME=docker ./util/docker_cmd.sh qmk format-python -a
 	RUNTIME=docker ./util/docker_cmd.sh qmk pytest
+
+check:
+	qmk compile -kb crkbd/rev1 -km lukexor
+	qmk compile -kb planck/rev7 -km lukexor
+
+crkbd-clear:
+	dfu-programmer atmega32u4 erase --force
+
+crkbd-left:
+	qmk flash -j0 -kb crkbd/rev1 -km lukexor -bl dfu-split-left
+
+crkbd-right:
+	qmk flash -j0 -kb crkbd/rev1 -km lukexor -bl dfu-split-right
+
+planck:
+	qmk flash -j0 -kb planck/rev7 -km lukexor
